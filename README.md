@@ -22,16 +22,38 @@ GitHub shows these files in every Giskard-AI repository, public or private, that
 | Preset | Use it in |
 | --- | --- |
 | `github>Giskard-AI/.github` (`default.json`) | Every code repository |
-| `github>Giskard-AI/.github:automerge` (`automerge.json`) | Repositories whose own test jobs are required status checks |
-
-```json
-{
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>Giskard-AI/.github"]
-}
-```
+| `github>Giskard-AI/.github:automerge` (`automerge.json`) | Repositories that meet the automerge prerequisites below |
 
 The presets do nothing until a repository extends them.
+
+### Adopting the presets
+
+1. Add a `renovate.json` at the root of the repository:
+
+   ```json
+   {
+     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+     "extends": ["github>Giskard-AI/.github"]
+   }
+   ```
+
+2. Once the [automerge prerequisites](#automerge-preset) hold, add the automerge preset after the default one:
+
+   ```json
+   "extends": ["github>Giskard-AI/.github", "github>Giskard-AI/.github:automerge"]
+   ```
+
+3. To change a setting for one repository, set it in that repository's `renovate.json`. Settings written there override the presets, and `packageRules` are appended after the presets' rules, so a later rule wins:
+
+   ```json
+   {
+     "extends": ["github>Giskard-AI/.github"],
+     "schedule": ["* 0-6 * * *"],
+     "packageRules": [
+       { "matchPackageNames": ["some-package"], "enabled": false }
+     ]
+   }
+   ```
 
 ### Default preset
 
@@ -47,12 +69,17 @@ The presets do nothing until a repository extends them.
 
 ### Automerge preset
 
-Automerges, once checks pass, patch and minor updates of development dependencies and GitHub Action digest updates. It never automerges major updates, production dependencies, or lock file maintenance (a lock file refresh can pull in production releases published the same day).
+Automerges, once checks pass, patch and minor updates of development dependencies and the first pinning of GitHub Actions to a commit SHA. It never automerges:
 
-Before extending `github>Giskard-AI/.github:automerge`, check both conditions:
+- major updates or production dependencies;
+- lock file maintenance, because a lock file refresh can pull in production releases published the same day;
+- GitHub Action digest updates, because a new digest for the same tag means the tag was moved to another commit;
+- security fixes, because they skip the 7-day wait and must not also skip review.
 
-- The repository's own test jobs are required status checks. Every repository already requires GitGuardian, so "some check is required" is not enough: without required tests, a PR with failing tests would merge.
-- Something can approve Renovate PRs. The org ruleset requires one approving review, so automerge only completes once an approval mechanism exists, for example Mend's Renovate Approve app installed on opted-in repositories. Never add Renovate as a ruleset bypass actor: that would also skip GitGuardian. This decision is tracked in ENG-1973.
+Prerequisites before extending `github>Giskard-AI/.github:automerge`:
+
+- The repository's own test jobs are required status checks. A required check that does not run the tests is not enough: a PR with failing tests would still merge.
+- If the branch rules require an approving review, automerge only completes once something approves Renovate PRs. Never give Renovate a bypass of the branch rules: that would also skip every other required check.
 
 ## Workflow templates
 

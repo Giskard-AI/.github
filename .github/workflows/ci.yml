@@ -9,17 +9,15 @@ permissions: {}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   zizmor:
     name: zizmor
     runs-on: ubuntu-slim
+    timeout-minutes: 10
     permissions:
       contents: read
-    env:
-      # renovate: datasource=pypi depName=zizmor
-      ZIZMOR_VERSION: "1.31.1"
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -31,11 +29,11 @@ jobs:
         with:
           advanced-security: false
           persona: pedantic
-          version: ${{ env.ZIZMOR_VERSION }}
 
   renovate-config:
     name: renovate-config
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
+    timeout-minutes: 10
     permissions:
       contents: read
     env:
@@ -53,6 +51,8 @@ jobs:
           node-version: 24
 
       - name: Validate Renovate presets
+        env:
+          NPM_CONFIG_IGNORE_SCRIPTS: "true"
         run: >-
           npx --yes --package "renovate@${RENOVATE_VERSION}" --
           renovate-config-validator --strict --no-global

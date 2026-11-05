@@ -6,10 +6,7 @@ This policy applies to every Giskard-AI repository that does not have its own `S
 
 Do not open a public issue, discussion, or pull request for security problems.
 
-Report vulnerabilities privately, in either of these ways:
-
-- through GitHub's private vulnerability reporting in the affected repository (**Security** tab, then **Report a vulnerability**), when the repository offers it;
-- by email to [security@giskard.ai](mailto:security@giskard.ai).
+Report the vulnerability privately through GitHub's private vulnerability reporting on the affected repository: open its **Security** tab, then select **Report a vulnerability**. If you cannot use GitHub, email [security@giskard.ai](mailto:security@giskard.ai) instead.
 
 Please include:
 
@@ -17,7 +14,7 @@ Please include:
 - a description of the issue and its impact;
 - steps or a minimal example to reproduce it.
 
-We acknowledge reports as quickly as we can, keep you informed while we investigate, and credit you in the published advisory unless you prefer otherwise.
+We aim to acknowledge reports within 5 business days. We keep you informed while we investigate, and credit you in the published advisory unless you prefer otherwise.
 
 ## Supported versions
 

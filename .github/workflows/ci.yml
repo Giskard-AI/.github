@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  zizmor:
+    name: zizmor
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+    env:
+      # renovate: datasource=pypi depName=zizmor
+      ZIZMOR_VERSION: "1.31.1"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run zizmor
+        uses: zizmorcore/zizmor-action@53290badfa369cb0bf7ad16342cb62c2fa47ac7b # v0.8.0
+        with:
+          advanced-security: false
+          persona: pedantic
+          version: ${{ env.ZIZMOR_VERSION }}
+
+  renovate-config:
+    name: renovate-config
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      # renovate: datasource=npm depName=renovate
+      RENOVATE_VERSION: "44.221.0"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Validate Renovate presets
+        run: >-
+          npx --yes --package "renovate@${RENOVATE_VERSION}" --
+          renovate-config-validator --strict --no-global
+          default.json automerge.json renovate.json

@@ -1,8 +1,12 @@
 * @Giskard-AI/r-d
 
-# The last matching pattern wins: admins own the Renovate presets, CI, and this file.
+# The last matching pattern wins: admins own the Renovate presets, CI, the security
+# reporting route, workflow templates, and this file.
 /default.json @Hartorn @pierlj
 /automerge.json @Hartorn @pierlj
 /renovate.json @Hartorn @pierlj
+/SECURITY.md @Hartorn @pierlj
+/.github/ISSUE_TEMPLATE/config.yml @Hartorn @pierlj
 /.github/workflows/ @Hartorn @pierlj
+/workflow-templates/ @Hartorn @pierlj
 /.github/CODEOWNERS @Hartorn @pierlj

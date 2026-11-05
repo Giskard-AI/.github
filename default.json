@@ -1,12 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "description": "Shared Renovate policy for Giskard-AI repositories. Extend it with \"github>Giskard-AI/.github\".",
-  "extends": [
-    "config:recommended",
-    ":semanticCommits",
-    "helpers:pinGitHubActionDigests"
-  ],
-  "schedule": ["before 4am on Monday"],
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "timezone": "Europe/Paris",
+  "schedule": ["* 0-6 * * 1"],
+  "prHourlyLimit": 0,
   "minimumReleaseAge": "7 days",
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
@@ -15,8 +13,10 @@
   },
   "labels": ["dependencies"],
   "lockFileMaintenance": {
+    "description": "Lock file maintenance has no release timestamp, so minimumReleaseAge would block it forever. Configure the release-age cooldown in the package manager instead (uv exclude-newer, pnpm minimumReleaseAge, npm min-release-age).",
     "enabled": true,
-    "schedule": ["before 4am on Monday"]
+    "schedule": ["* 0-6 * * 1"],
+    "minimumReleaseAge": null
   },
   "packageRules": [
     {
@@ -40,10 +40,10 @@
       "groupSlug": "{{manager}}-deps"
     },
     {
-      "description": "GHCR gives zizmor images no release timestamp, which minimumReleaseAge needs; read zizmor releases from PyPI instead.",
-      "matchPackageNames": ["ghcr.io/zizmorcore/zizmor"],
-      "overrideDatasource": "pypi",
-      "overridePackageName": "zizmor"
+      "description": "GHCR and Quay do not expose image release timestamps; without this, minimumReleaseAge would block every update of images hosted there.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/**", "quay.io/**"],
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
     }
   ]
 }

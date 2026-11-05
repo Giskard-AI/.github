@@ -1,0 +1,49 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Shared Renovate policy for Giskard-AI repositories. Extend it with \"github>Giskard-AI/.github\".",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "timezone": "Europe/Paris",
+  "schedule": ["* 0-6 * * 1"],
+  "prHourlyLimit": 0,
+  "minimumReleaseAge": "7 days",
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "description": "Security-fix PRs (GitHub alerts and OSV) must not wait for minimumReleaseAge. Renovate's built-in default already sets this; it is explicit here so the 7-day wait never holds back a fix.",
+    "minimumReleaseAge": null
+  },
+  "labels": ["dependencies"],
+  "lockFileMaintenance": {
+    "description": "Lock file maintenance has no release timestamp, so minimumReleaseAge would block it forever. Configure the release-age cooldown in the package manager instead (uv exclude-newer, pnpm minimumReleaseAge, npm min-release-age).",
+    "enabled": true,
+    "schedule": ["* 0-6 * * 1"],
+    "minimumReleaseAge": null
+  },
+  "packageRules": [
+    {
+      "description": "Do not bump the Python interpreter version (requires-python, .python-version); projects change it on purpose.",
+      "matchManagers": ["pep621", "pyenv"],
+      "matchPackageNames": ["/^python$/"],
+      "enabled": false
+    },
+    {
+      "description": "One PR per package manager. Lock file maintenance keeps its own PR.",
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest"
+      ],
+      "matchPackageNames": ["*"],
+      "groupName": "{{manager}} dependencies",
+      "groupSlug": "{{manager}}-deps"
+    },
+    {
+      "description": "GHCR and Quay do not expose image release timestamps; without this, minimumReleaseAge would block every update of images hosted there.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/**", "quay.io/**"],
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
+    }
+  ]
+}

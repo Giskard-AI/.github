@@ -1,12 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Opt-in automerge for repositories whose CI runs tests and whose default branch requires status checks. Extend it after the default preset with \"github>Giskard-AI/.github:automerge\".",
+  "description": "Opt-in automerge for repositories whose own test jobs are required status checks. Extend it after the default preset with \"github>Giskard-AI/.github:automerge\".",
   "automergeType": "pr",
   "platformAutomerge": true,
-  "lockFileMaintenance": {
-    "description": "Automerge the weekly lock file refresh once CI passes.",
-    "automerge": true
-  },
   "packageRules": [
     {
       "description": "Automerge patch and minor updates of development dependencies once CI passes. They get their own group because Renovate only automerges a group when every update in it is automergeable.",

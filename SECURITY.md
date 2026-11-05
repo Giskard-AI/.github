@@ -14,7 +14,7 @@ Please include:
 - a description of the issue and its impact;
 - steps or a minimal example to reproduce it.
 
-We aim to acknowledge reports within 5 business days. We keep you informed while we investigate, and credit you in the published advisory unless you prefer otherwise.
+We keep you informed while we investigate, and credit you in the published advisory unless you prefer otherwise.
 
 ## Supported versions
 

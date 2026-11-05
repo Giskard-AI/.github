@@ -34,8 +34,6 @@ body:
     attributes:
       label: Version
       description: Release, package version, or commit SHA you are using.
-    validations:
-      required: true
   - type: textarea
     id: environment
     attributes:

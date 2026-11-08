@@ -1,0 +1,41 @@
+name: Bug report
+description: Report something that does not work as expected.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Do not report security vulnerabilities here: follow the repository's security policy (**Security** tab) instead.
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug, and what you expected to happen instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps, code, or configuration that reproduce the problem.
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or error output
+      description: Paste relevant output. Remove secrets and personal data first.
+      render: shell
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Release, package version, or commit SHA you are using.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, language runtime version, and anything else that may matter.

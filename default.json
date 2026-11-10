@@ -20,9 +20,9 @@
   },
   "packageRules": [
     {
-      "description": "Do not bump the Python interpreter version (requires-python, .python-version); projects change it on purpose.",
-      "matchManagers": ["pep621", "pyenv"],
-      "matchPackageNames": ["/^python$/"],
+      "description": "Do not bump the Python interpreter version (requires-python, .python-version, python-version on actions/setup-python); projects change it on purpose.",
+      "matchManagers": ["pep621", "pyenv", "github-actions"],
+      "matchPackageNames": ["/^python$/", "actions/python-versions"],
       "enabled": false
     },
     {
